@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CONTENT FACTORY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #FF0000;
+      --red-dark: #8B0000;
+      --red-muted: #4a1515;
+      --blue: #0048BA;
+      --gray: #1a1a1a;
+      --gray-light: #333333;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* 키네틱 배경 */
+    .bg-text {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      opacity: 0.03;
+    }
+    
+    .bg-text span {
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20vw;
+      font-weight: 400;
+      white-space: nowrap;
+      animation: float 20s linear infinite;
+    }
+    
+    .bg-text span:nth-child(1) { top: 10%; left: -10%; animation-delay: 0s; }
+    .bg-text span:nth-child(2) { top: 40%; left: -20%; animation-delay: -5s; }
+    .bg-text span:nth-child(3) { top: 70%; left: -15%; animation-delay: -10s; }
+    
+    @keyframes float {
+      from { transform: translateX(0); }
+      to { transform: translateX(120vw); }
+    }
+    
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    /* 헤더 */
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    
+    .title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 15vw, 12rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .title .word {
+      display: block;
+      overflow: hidden;
+    }
+    
+    .title .word span {
+      display: inline-block;
+      animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transform: translateY(100%);
+    }
+    
+    .title .word:nth-child(2) span {
+      animation-delay: 0.1s;
+      color: var(--red);
+    }
+    
+    @keyframes slideUp {
+      to { transform: translateY(0); }
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 20px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      animation: fadeIn 1s 0.5s forwards;
+      opacity: 0;
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    
+    /* 입력 섹션 */
+    .input-section {
+      background: var(--gray);
+      border: 1px solid var(--gray-light);
+      padding: 40px;
+      margin-bottom: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .input-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--blue);
+    }
+    
+    .section-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      color: var(--blue);
+      margin-bottom: 15px;
+    }
+    
+    .api-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .input-field {
+      flex: 1;
+      min-width: 250px;
+      padding: 18px 20px;
+      background: var(--black);
+      border: 2px solid var(--gray-light);
+      color: var(--white);
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 20px rgba(0, 72, 186, 0.3);
+    }
+    
+    .input-field::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+    
+    .api-link {
+      color: var(--blue);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .api-link:hover {
+      color: var(--white);
+    }
+    
+    .topic-input {
+      width: 100%;
+      padding: 25px;
+      background: var(--black);
+      border: 2px solid var(--gray-light);
+      color: var(--white);
+      font-size: 1.5rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 30px;
+      transition: all 0.3s;
+    }
+    
+    .topic-input:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 30px rgba(0, 72, 186, 0.3);
+    }
+    
+    .topic-input::placeholder {
+      color: rgba(255,255,255,0.2);
+      font-weight: 400;
+    }
+    
+    /* 콘텐츠 타입 선택 */
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    
+    .type-btn {
+      padding: 20px;
+      background: transparent;
+      border: 2px solid var(--gray-light);
+      color: rgba(255,255,255,0.5);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .type-btn::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      background: var(--red-muted);
+      transition: height 0.3s;
+      z-index: -1;
+    }
+    
+    .type-btn.selected {
+      border-color: var(--red-dark);
+      color: var(--white);
+    }
+    
+    .type-btn.selected::before {
+      height: 100%;
+    }
+    
+    .type-btn:hover {
+      border-color: var(--white);
+      color: var(--white);
+      transform: scale(1.02);
+    }
+    
+    .type-btn .icon {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+    
+    /* 생성 버튼 */
+    .generate-btn {
+      width: 100%;
+      padding: 25px;
+      background: var(--blue);
+      border: none;
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    
+    .generate-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      transition: left 0.3s;
+      z-index: 0;
+    }
+    
+    .generate-btn:hover::before {
+      left: 0;
+    }
+    
+    .generate-btn:hover {
+      color: var(--black);
+    }
+    
+    .generate-btn span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .generate-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .generate-btn:disabled:hover::before {
+      left: -100%;
+    }
+    
+    /* 로딩 */
+    .loading {
+      text-align: center;
+      padding: 80px 20px;
+      display: none;
+    }
+    
+    .loading.show { display: block; }
+    
+    .loader {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+    
+    .loader span {
+      width: 12px;
+      height: 60px;
+      background: var(--blue);
+      animation: bars 1s ease-in-out infinite;
+    }
+    
+    .loader span:nth-child(2) { animation-delay: 0.1s; background: var(--white); }
+    .loader span:nth-child(3) { animation-delay: 0.2s; background: var(--blue); }
+    .loader span:nth-child(4) { animation-delay: 0.3s; background: var(--white); }
+    .loader span:nth-child(5) { animation-delay: 0.4s; background: var(--red); }
+    
+    @keyframes bars {
+      0%, 100% { transform: scaleY(0.3); }
+      50% { transform: scaleY(1); }
+    }
+    
+    .loading-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.2em;
+    }
+    
+    /* 에러 */
+    .error {
+      background: var(--red);
+      color: var(--white);
+      padding: 20px;
+      margin-bottom: 30px;
+      font-weight: 700;
+      display: none;
+    }
+    
+    .error.show { display: block; }
+    
+    /* 결과 */
+    .results {
+      display: none;
+    }
+    
+    .results.show { display: block; }
+    
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+    
+    .results-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+    }
+    
+    .results-title span {
+      color: var(--blue);
+    }
+    
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+    }
+    
+    @media (max-width: 500px) {
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .result-card {
+      background: var(--gray);
+      border: 1px solid var(--gray-light);
+      position: relative;
+      animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    
+    .result-card:nth-child(2) { animation-delay: 0.1s; }
+    .result-card:nth-child(3) { animation-delay: 0.2s; }
+    .result-card:nth-child(4) { animation-delay: 0.3s; }
+    .result-card:nth-child(5) { animation-delay: 0.4s; }
+    .result-card:nth-child(6) { animation-delay: 0.5s; }
+    .result-card:nth-child(7) { animation-delay: 0.6s; }
+    
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      border-bottom: 1px solid var(--gray-light);
+      background: rgba(0, 72, 186, 0.1);
+    }
+    
+    .result-type {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+    
+    .result-type .icon {
+      margin-right: 10px;
+    }
+    
+    .copy-btn {
+      padding: 10px 20px;
+      background: transparent;
+      border: 2px solid var(--blue);
+      color: var(--blue);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .copy-btn:hover {
+      background: var(--blue);
+      color: var(--white);
+    }
+    
+    .result-content {
+      padding: 25px;
+      max-height: 500px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      color: rgba(255,255,255,0.8);
+    }
+    
+    .result-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    .result-content::-webkit-scrollbar-thumb {
+      background: var(--blue);
+    }
+    
+    /* 토스트 */
+    .toast {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--blue);
+      color: var(--white);
+      padding: 15px 40px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    
+    /* 버튼들 */
+    .btn-small {
+      padding: 18px 25px;
+      background: transparent;
+      border: 2px solid var(--gray-light);
+      color: var(--white);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-small:hover {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: var(--white);
+    }
+    
+    /* 악센트 라인 */
+    .accent-line {
+      width: 60px;
+      height: 4px;
+      background: var(--red);
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-text">
+    <span>CONTENT</span>
+    <span>FACTORY</span>
+    <span>CREATE</span>
+  </div>
+  
+  <div class="container">
+    <header class="header">
+      <h1 class="title">
+        <div class="word"><span>CONTENT</span></div>
+        <div class="word"><span>FACTORY</span></div>
+      </h1>
+      <div class="accent-line"></div>
+      <p class="subtitle">One Topic → Multiple Platforms</p>
+    </header>
+    
+    <div class="input-section">
+      <div class="section-label">SELECT AI PROVIDER</div>
+      <div class="types-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 25px;">
+        <button class="type-btn selected" data-provider="openai" onclick="selectProvider('openai')">
+          <span class="icon">🤖</span>
+          OPENAI
+        </button>
+        <button class="type-btn" data-provider="claude" onclick="selectProvider('claude')">
+          <span class="icon">🧠</span>
+          CLAUDE
+        </button>
+        <button class="type-btn" data-provider="gemini" onclick="selectProvider('gemini')">
+          <span class="icon">✨</span>
+          GEMINI
+        </button>
+      </div>
+
+      <div class="section-label">API CONFIGURATION</div>
+      <div class="api-row">
+        <input type="password" class="input-field" id="apiKey" placeholder="Enter API Key">
+        <select class="input-field" id="modelSelect" style="min-width: 200px;">
+          <option value="gpt-4o">GPT-4o</option>
+          <option value="gpt-4o-mini" selected>GPT-4o Mini</option>
+          <option value="gpt-4-turbo">GPT-4 Turbo</option>
+          <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+        </select>
+        <button class="btn-small" onclick="saveKey()">SAVE</button>
+        <button class="btn-small" onclick="toggleKey()">👁️</button>
+      </div>
+      <div class="api-row">
+        <a href="https://platform.openai.com/api-keys" target="_blank" class="api-link" id="apiLink">GET API KEY →</a>
+      </div>
+      
+      <div class="section-label">YOUR TOPIC</div>
+      <input type="text" class="topic-input" id="topic" placeholder="Enter your topic here...">
+
+      <div class="section-label">REFERENCE MATERIAL (OPTIONAL)</div>
+      <div class="api-row">
+        <input type="file" class="input-field" id="fileUpload" accept=".txt,.md" style="display: none;">
+        <button class="btn-small" onclick="document.getElementById('fileUpload').click()">📁 UPLOAD FILE</button>
+        <input type="url" class="input-field" id="urlInput" placeholder="Or paste URL here..." style="flex: 2;">
+        <button class="btn-small" onclick="clearReference()">✕ CLEAR</button>
+      </div>
+      <div id="referencePreview" style="display: none; margin-top: 15px; padding: 15px; background: var(--black); border: 1px solid var(--gray-light); font-size: 0.85rem; color: rgba(255,255,255,0.6); max-height: 150px; overflow-y: auto;"></div>
+
+      <div class="section-label">SELECT PLATFORMS</div>
+      <div class="types-grid" id="contentTypes">
+        <button class="type-btn selected" data-type="youtube">
+          <span class="icon">📺</span>
+          YOUTUBE
+        </button>
+        <button class="type-btn selected" data-type="tistory">
+          <span class="icon">📝</span>
+          TISTORY
+        </button>
+        <button class="type-btn selected" data-type="newsletter">
+          <span class="icon">📧</span>
+          NEWSLETTER
+        </button>
+        <button class="type-btn selected" data-type="naver">
+          <span class="icon">🌿</span>
+          NAVER BLOG
+        </button>
+        <button class="type-btn selected" data-type="column">
+          <span class="icon">📰</span>
+          COLUMN
+        </button>
+        <button class="type-btn selected" data-type="instagram">
+          <span class="icon">📸</span>
+          INSTAGRAM
+        </button>
+        <button class="type-btn selected" data-type="shorts">
+          <span class="icon">🎬</span>
+          SHORTS
+        </button>
+        <button class="type-btn selected" data-type="threads">
+          <span class="icon">🧵</span>
+          THREADS
+        </button>
+        <button class="type-btn selected" data-type="x">
+          <span class="icon">𝕏</span>
+          X (TWITTER)
+        </button>
+        <button class="type-btn selected" data-type="linkedin">
+          <span class="icon">💼</span>
+          LINKEDIN
+        </button>
+      </div>
+      
+      <button class="generate-btn" id="generateBtn" onclick="generate()">
+        <span>→ GENERATE CONTENT</span>
+      </button>
+    </div>
+    
+    <div class="error" id="error"></div>
+    
+    <div class="loading" id="loading">
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="loading-text" id="progressText">GENERATING...</div>
+    </div>
+    
+    <div class="results" id="results">
+      <div class="results-header">
+        <h2 class="results-title">GENERATED <span>CONTENT</span></h2>
+      </div>
+      <div class="result-grid" id="resultGrid"></div>
+    </div>
+  </div>
+  
+  <div class="toast" id="toast">COPIED!</div>
+
+  <script>
+    let referenceContent = '';
+    let currentProvider = 'openai';
+
+    const PROVIDER_CONFIG = {
+      openai: {
+        models: [
+          { value: 'gpt-4o', label: 'GPT-4o' },
+          { value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
+          { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
+          { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' }
+        ],
+        keyLink: 'https://platform.openai.com/api-keys',
+        placeholder: 'OPENAI API KEY'
+      },
+      claude: {
+        models: [
+          { value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' },
+          { value: 'claude-3-opus-20240229', label: 'Claude 3 Opus' },
+          { value: 'claude-3-sonnet-20240229', label: 'Claude 3 Sonnet' },
+          { value: 'claude-3-haiku-20240307', label: 'Claude 3 Haiku' }
+        ],
+        keyLink: 'https://console.anthropic.com/settings/keys',
+        placeholder: 'ANTHROPIC API KEY'
+      },
+      gemini: {
+        models: [
+          { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro' },
+          { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash' },
+          { value: 'gemini-pro', label: 'Gemini Pro' }
+        ],
+        keyLink: 'https://aistudio.google.com/app/apikey',
+        placeholder: 'GOOGLE API KEY'
+      }
+    };
+
+    const CONTENT_CONFIG = {
+      youtube: {
+        icon: '📺',
+        title: 'YOUTUBE SCRIPT',
+        prompt: `유튜브 영상 스크립트를 작성해주세요.
+- 10-15분 분량
+- [인트로], [본론1], [본론2], [본론3], [아웃트로] 구조
+- 인트로: 후킹 멘트로 시작, 영상 소개
+- 각 섹션에 예상 시간 표시
+- 시청자에게 말하듯 자연스러운 구어체
+- 중간중간 "영상 재미있으시면 구독 좋아요~" 같은 CTA 포함
+- 자막용 핵심 키워드 [] 표시`
+      },
+      tistory: {
+        icon: '📝',
+        title: 'TISTORY',
+        prompt: `티스토리 블로그 포스트를 작성해주세요.
+- SEO 최적화된 제목 (클릭 유도)
+- HTML 태그 사용 (h2, h3, p, ul, li, strong)
+- 서론/본론(2-3섹션)/결론 구조
+- 1500자 이상
+- 핵심 키워드 자연스럽게 반복
+- 마지막에 관련 글 추천 유도 문구`
+      },
+      newsletter: {
+        icon: '📧',
+        title: 'NEWSLETTER',
+        prompt: `이메일 뉴스레터를 작성해주세요.
+- 친근하면서도 전문적인 톤
+- 매력적인 제목 (오픈율 높이는)
+- 인사 → 핵심 내용 → 인사이트 → CTA 구조
+- 읽기 쉽게 짧은 문단
+- 이모지 적절히 활용
+- PS. 추가 메시지 포함`
+      },
+      naver: {
+        icon: '🌿',
+        title: 'NAVER BLOG',
+        prompt: `네이버 블로그 포스트를 작성해주세요.
+- 검색 최적화된 제목
+- 사진 들어갈 위치 [이미지: 설명] 표시
+- 친근한 일상 톤
+- 1000-1500자
+- 해시태그 10개 추천
+- "도움이 되셨다면 공감 부탁드려요" 마무리`
+      },
+      column: {
+        icon: '📰',
+        title: 'COLUMN',
+        prompt: `전문 칼럼을 작성해주세요.
+- 격식있는 문어체
+- 논리적 구조 (문제제기 → 분석 → 제안)
+- 1500-2000자
+- 전문 용어 적절히 사용
+- 인용이나 데이터 언급 (가상 가능)
+- 독자에게 생각할 거리 제공하는 마무리`
+      },
+      instagram: {
+        icon: '📸',
+        title: 'INSTAGRAM',
+        prompt: `인스타그램 포스트를 작성해주세요.
+- 캐러셀(10장) 구성: 각 장별 텍스트
+  1장: 후킹 제목
+  2-8장: 핵심 내용 (한 장에 1-2문장)
+  9장: 요약
+  10장: CTA (저장/공유 유도)
+- 캡션 (이모지 포함, 300자 내외)
+- 해시태그 20개`
+      },
+      shorts: {
+        icon: '🎬',
+        title: 'SHORTS / REELS',
+        prompt: `유튜브 숏츠/인스타 릴스 스크립트를 작성해주세요.
+- 60초 이내 분량
+- [0-3초] 강력한 훅
+- [3-50초] 핵심 내용 (빠른 전개)
+- [50-60초] CTA
+- 각 구간별 자막 텍스트
+- 화면 전환/효과 제안
+- 트렌디한 말투`
+      },
+      threads: {
+        icon: '🧵',
+        title: 'THREADS',
+        prompt: `Threads (인스타그램 쓰레드) 포스트를 작성해주세요.
+- 첫 포스트: 강력한 후킹 문장 (280자 이내)
+- 2-8개 연속 포스트로 구성
+- 각 포스트는 독립적으로도 이해 가능하도록
+- 친근하고 대화하는 듯한 톤
+- 이모지 적절히 활용
+- 마지막 포스트에 질문이나 참여 유도
+- 각 포스트를 [1/8], [2/8] 형식으로 표시`
+      },
+      x: {
+        icon: '𝕏',
+        title: 'X (TWITTER)',
+        prompt: `X (구 트위터) 포스트를 작성해주세요.
+- 280자 제한 준수
+- 5-10개의 트윗 쓰레드로 구성
+- 첫 트윗: 주목을 끄는 후킹 문장
+- 각 트윗은 간결하고 명확하게
+- 적절한 줄바꿈으로 가독성 향상
+- 관련 해시태그 2-3개
+- 마지막 트윗: 리트윗/좋아요 유도
+- 각 트윗을 [1/10], [2/10] 형식으로 표시`
+      },
+      linkedin: {
+        icon: '💼',
+        title: 'LINKEDIN',
+        prompt: `LinkedIn 포스트를 작성해주세요.
+- 전문적이면서도 친근한 톤
+- 후킹 첫 줄 (짧고 강렬하게)
+- 1500자 내외
+- 개인적 경험/인사이트 포함
+- 명확한 구조 (문제 제기 → 경험/인사이트 → 교훈/제안)
+- 2-3줄마다 줄바꿈으로 가독성 향상
+- 관련 해시태그 5개
+- 마지막에 독자 의견 묻는 질문
+- 전문성 강조하되 너무 딱딱하지 않게`
+      }
+    };
+    
+    window.onload = () => {
+      // 저장된 API 키 불러오기
+      loadSavedKeys();
+
+      document.querySelectorAll('.type-btn[data-type]').forEach(el => {
+        el.addEventListener('click', () => el.classList.toggle('selected'));
+      });
+
+      // 파일 업로드 이벤트
+      document.getElementById('fileUpload').addEventListener('change', handleFileUpload);
+
+      // URL 입력 이벤트 (엔터 키 또는 포커스 아웃)
+      document.getElementById('urlInput').addEventListener('blur', handleUrlInput);
+      document.getElementById('urlInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleUrlInput();
+      });
+
+      // 기본 provider 설정
+      selectProvider('openai');
+    };
+
+    // Provider 선택
+    function selectProvider(provider) {
+      currentProvider = provider;
+
+      // UI 업데이트
+      document.querySelectorAll('.type-btn[data-provider]').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+      document.querySelector(`[data-provider="${provider}"]`).classList.add('selected');
+
+      // 모델 드롭다운 업데이트
+      const config = PROVIDER_CONFIG[provider];
+      const select = document.getElementById('modelSelect');
+      select.innerHTML = config.models.map(m =>
+        `<option value="${m.value}">${m.label}</option>`
+      ).join('');
+
+      // API 키 placeholder 업데이트
+      document.getElementById('apiKey').placeholder = config.placeholder;
+
+      // API 키 링크 업데이트
+      document.getElementById('apiLink').href = config.keyLink;
+
+      // 저장된 키 불러오기
+      loadSavedKeys();
+    }
+
+    // 저장된 키 불러오기
+    function loadSavedKeys() {
+      const saved = localStorage.getItem(`${currentProvider}_key`);
+      if (saved) {
+        document.getElementById('apiKey').value = saved;
+      } else {
+        document.getElementById('apiKey').value = '';
+      }
+    }
+    
+    function saveKey() {
+      const key = document.getElementById('apiKey').value.trim();
+      if (key) {
+        localStorage.setItem(`${currentProvider}_key`, key);
+        showToast('API KEY SAVED!');
+      }
+    }
+    
+    function toggleKey() {
+      const input = document.getElementById('apiKey');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    // 파일 업로드 처리
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (!file.name.match(/\.(txt|md)$/i)) {
+        showToast('Only .txt or .md files allowed');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        referenceContent = e.target.result;
+        showReferencePreview(`📁 ${file.name}`, referenceContent);
+        showToast('FILE LOADED!');
+        // URL 입력 필드 초기화
+        document.getElementById('urlInput').value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    // URL 입력 처리
+    async function handleUrlInput() {
+      const url = document.getElementById('urlInput').value.trim();
+      if (!url) return;
+
+      try {
+        showToast('LOADING URL...');
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to fetch URL');
+
+        const text = await response.text();
+        referenceContent = text;
+        showReferencePreview(`🔗 ${url}`, text);
+        showToast('URL LOADED!');
+
+        // 파일 업로드 초기화
+        document.getElementById('fileUpload').value = '';
+      } catch (err) {
+        showToast('Failed to load URL');
+        console.error(err);
+      }
+    }
+
+    // 참고 자료 미리보기 표시
+    function showReferencePreview(title, content) {
+      const preview = document.getElementById('referencePreview');
+      const truncated = content.length > 500 ? content.substring(0, 500) + '...' : content;
+      preview.innerHTML = `<strong>${title}</strong><br><br>${escapeHtml(truncated)}`;
+      preview.style.display = 'block';
+    }
+
+    // 참고 자료 클리어
+    function clearReference() {
+      referenceContent = '';
+      document.getElementById('fileUpload').value = '';
+      document.getElementById('urlInput').value = '';
+      document.getElementById('referencePreview').style.display = 'none';
+      showToast('CLEARED!');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+    
+    function copyContent(btn) {
+      const content = btn.closest('.result-card').querySelector('.result-content').textContent;
+      navigator.clipboard.writeText(content);
+      showToast('COPIED TO CLIPBOARD!');
+    }
+    
+    async function generate() {
+      const apiKey = document.getElementById('apiKey').value.trim() || localStorage.getItem(`${currentProvider}_key`);
+      const topic = document.getElementById('topic').value.trim();
+      const model = document.getElementById('modelSelect').value;
+
+      if (!apiKey) {
+        document.getElementById('error').textContent = '⚠️ PLEASE ENTER YOUR API KEY';
+        document.getElementById('error').classList.add('show');
+        return;
+      }
+
+      if (!topic) {
+        document.getElementById('error').textContent = '⚠️ PLEASE ENTER A TOPIC';
+        document.getElementById('error').classList.add('show');
+        return;
+      }
+
+      const selectedTypes = [...document.querySelectorAll('.type-btn[data-type].selected')]
+        .map(el => el.dataset.type);
+
+      if (selectedTypes.length === 0) {
+        document.getElementById('error').textContent = '⚠️ PLEASE SELECT AT LEAST ONE PLATFORM';
+        document.getElementById('error').classList.add('show');
+        return;
+      }
+
+      document.getElementById('error').classList.remove('show');
+      document.getElementById('loading').classList.add('show');
+      document.getElementById('results').classList.remove('show');
+      document.getElementById('generateBtn').disabled = true;
+
+      const results = {};
+
+      for (let i = 0; i < selectedTypes.length; i++) {
+        const type = selectedTypes[i];
+        const config = CONTENT_CONFIG[type];
+
+        document.getElementById('progressText').textContent =
+          `GENERATING ${config.title}... (${i + 1}/${selectedTypes.length})`;
+
+        try {
+          const content = await callAI(apiKey, model, topic, config.prompt);
+          results[type] = content;
+        } catch (err) {
+          results[type] = `ERROR: ${err.message}`;
+        }
+      }
+
+      displayResults(results, selectedTypes);
+    }
+
+    // AI API 호출
+    async function callAI(apiKey, model, topic, promptTemplate) {
+      const fullPrompt = `주제: ${topic}${referenceContent ? `\n\n참고 자료:\n${referenceContent}` : ''}\n\n${promptTemplate}`;
+
+      if (currentProvider === 'openai') {
+        return await callOpenAI(apiKey, model, fullPrompt);
+      } else if (currentProvider === 'claude') {
+        return await callClaude(apiKey, model, fullPrompt);
+      } else if (currentProvider === 'gemini') {
+        return await callGemini(apiKey, model, fullPrompt);
+      }
+    }
+
+    // OpenAI API
+    async function callOpenAI(apiKey, model, prompt) {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            { role: 'system', content: '당신은 전문 콘텐츠 크리에이터입니다. 주어진 형식에 맞게 고품질 콘텐츠를 작성합니다.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.8,
+          max_tokens: 2000
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+      return data.choices[0].message.content;
+    }
+
+    // Claude API
+    async function callClaude(apiKey, model, prompt) {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: model,
+          max_tokens: 2000,
+          messages: [
+            { role: 'user', content: `당신은 전문 콘텐츠 크리에이터입니다. 주어진 형식에 맞게 고품질 콘텐츠를 작성합니다.\n\n${prompt}` }
+          ],
+          temperature: 0.8
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+      return data.content[0].text;
+    }
+
+    // Gemini API
+    async function callGemini(apiKey, model, prompt) {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `당신은 전문 콘텐츠 크리에이터입니다. 주어진 형식에 맞게 고품질 콘텐츠를 작성합니다.\n\n${prompt}`
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 2000
+          }
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+      return data.candidates[0].content.parts[0].text;
+    }
+    
+    function displayResults(results, types) {
+      document.getElementById('loading').classList.remove('show');
+      document.getElementById('generateBtn').disabled = false;
+      
+      const grid = document.getElementById('resultGrid');
+      grid.innerHTML = '';
+      
+      types.forEach(type => {
+        const config = CONTENT_CONFIG[type];
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <div class="result-header">
+            <span class="result-type"><span class="icon">${config.icon}</span>${config.title}</span>
+            <button class="copy-btn" onclick="copyContent(this)">COPY</button>
+          </div>
+          <div class="result-content">${escapeHtml(results[type])}</div>
+        `;
+        grid.appendChild(card);
+      });
+      
+      document.getElementById('results').classList.add('show');
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
