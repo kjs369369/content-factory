@@ -1183,6 +1183,14 @@
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 2000);
     }
+
+    function showError(msg) {
+      const errorEl = document.getElementById('error');
+      errorEl.textContent = msg;
+      errorEl.classList.add('show');
+      // 5초 후 자동으로 에러 메시지 제거
+      setTimeout(() => errorEl.classList.remove('show'), 5000);
+    }
     
     function copyContent(btn) {
       const content = btn.closest('.result-card').querySelector('.result-content').textContent;
@@ -1192,27 +1200,31 @@
     
     async function generate() {
       const apiKey = document.getElementById('apiKey').value.trim() || localStorage.getItem(`${currentProvider}_key`);
-      const topic = document.getElementById('topic').value.trim();
+      const topicInput = document.getElementById('topic');
+      const topic = topicInput ? topicInput.value.trim() : '';
       const model = document.getElementById('modelSelect').value;
 
+      // 디버깅 로그
+      console.log('Generate called - Topic:', topic, 'Length:', topic.length);
+
       if (!apiKey) {
-        document.getElementById('error').textContent = '⚠️ PLEASE ENTER YOUR API KEY';
-        document.getElementById('error').classList.add('show');
+        showError('⚠️ API 키를 입력해주세요 (PLEASE ENTER YOUR API KEY)');
         return;
       }
 
       if (!topic) {
-        document.getElementById('error').textContent = '⚠️ PLEASE ENTER A TOPIC';
-        document.getElementById('error').classList.add('show');
+        showError('⚠️ 주제를 입력해주세요 (PLEASE ENTER A TOPIC)');
+        topicInput.focus();
         return;
       }
 
       const selectedTypes = [...document.querySelectorAll('.type-btn[data-type].selected')]
         .map(el => el.dataset.type);
 
+      console.log('Selected platforms:', selectedTypes);
+
       if (selectedTypes.length === 0) {
-        document.getElementById('error').textContent = '⚠️ PLEASE SELECT AT LEAST ONE PLATFORM';
-        document.getElementById('error').classList.add('show');
+        showError('⚠️ 최소 하나의 플랫폼을 선택해주세요 (PLEASE SELECT AT LEAST ONE PLATFORM)');
         return;
       }
 
